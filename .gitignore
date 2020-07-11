@@ -5,3 +5,4 @@ coverage
 app.spec.js
 listingTable.csv
 reservationsTable.csv
+listingInfo.json

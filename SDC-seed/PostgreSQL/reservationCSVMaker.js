@@ -18,7 +18,7 @@ while (today <= threeMonthsFromNow) {
 const writeReservations = fs.createWriteStream('reservationsTable.csv');
 writeReservations.write('listingId,date,adult,children,infant,total\n', 'utf8');
 
-function writeSomeMillion(writer, encoding, cb) {
+function generateReservations(writer, encoding, cb) {
   let listingId = 1;
 
   function write() {
@@ -64,6 +64,6 @@ function writeSomeMillion(writer, encoding, cb) {
   write();
 }
 
-writeSomeMillion(writeReservations, 'utf-8', () => {
+generateReservations(writeReservations, 'utf-8', () => {
   writeReservations.end();
 });
