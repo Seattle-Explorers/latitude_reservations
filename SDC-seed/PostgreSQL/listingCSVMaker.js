@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 const writeListings = fs.createWriteStream('listingTable.csv');
-writeListings.write('listingId,reviews,avatar\n', 'utf8');
+writeListings.write('listingId,reviews,price\n', 'utf8');
 
 const randomNum = (min, max) => (Math.floor(Math.random() * (max - min + 1) + min));
 
@@ -9,13 +9,13 @@ function writeTenMillion(writer, encoding, cb) {
   let i = 10000000;
   let id = 0;
 
-  function write () {
+  function write() {
     let ok = true;
 
     do {
       i -= 1;
       id += 1;
-      const listingId = id.toString().padStart(7, '0');
+      const listingId = id.toString().padStart(8, '0');
       const reviews = randomNum(50, 300);
       const price = randomNum(50, 400);
       const data = `${listingId},${reviews}, ${price}\n`;
