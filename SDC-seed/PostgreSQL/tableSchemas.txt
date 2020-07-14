@@ -4,3 +4,5 @@ CREATE TABLE listings (
   reviews int,
   price int 
 );
+
+\copy listings(listedId, reviews, price) from 'listingTable.csv' delimiter ',' CSV HEADER;
