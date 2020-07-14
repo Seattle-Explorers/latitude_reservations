@@ -1,0 +1,6 @@
+CREATE TABLE listings (
+  id SERIAL,
+  listedId varchar(8),
+  reviews int,
+  price int 
+);
