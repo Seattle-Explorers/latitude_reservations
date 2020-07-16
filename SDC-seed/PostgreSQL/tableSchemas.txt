@@ -1,8 +1,31 @@
 CREATE TABLE listings (
   id SERIAL,
-  listedId varchar(8),
+  listingId varchar(8),
   reviews int,
-  price int 
+  price int,
+  PRIMARY KEY (listingId) 
 );
 
 \copy listings(listedId, reviews, price) from 'listingTable.csv' delimiter ',' CSV HEADER;
+
+CREATE TABLE reservations(
+  id SERIAL,
+  listingId varchar(8),
+  date varchar(10),
+  adult int,
+  children int, 
+  infant int,
+  FOREIGN KEY (listingId) REFERENCES listings (listingId)
+);
+
+\copy reservations(listingId, date, adult, children, infant) from 'reservationsTable.csv' delimiter ',' CSV HEADER;
+
+=== QUERIES ===
+
+--- for get ---
+SELECT r.date, r.adult, r.children, r.infant FROM listings AS l LEFT JOIN reservations as r ON r.listingId = l.listingId WHERE l.listingId = '05000000';
+
+SELECT l.reviews, l.price FROM listings AS l WHERE l.listingId = '01000000';
+
+--- for update ---
+INSERT INTO reservations(listingid, date, adult,children,infant) VALUES ('10000000','2020-08-21',5,2,1)

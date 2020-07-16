@@ -45,9 +45,8 @@ function generateReservations(writer, encoding, cb) {
       const adult = randomNum(1, 5);
       const children = randomNum(0, 5);
       const infant = randomNum(0, 5);
-      const total = adult + children + infant;
 
-      const data = `${listingId},${date},${adult},${children},${infant},${total}\n`;
+      const data = `${listingId.toString().padStart(8, '0')},${date},${adult},${children},${infant}\n`;
 
       if (listingId === 10000000) {
         writer.write(data, encoding, cb);
