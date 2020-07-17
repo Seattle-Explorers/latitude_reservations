@@ -16,12 +16,9 @@ while (today <= threeMonthsFromNow) {
   today = moment(today).add(1, 'days');
 }
 
-const writeListingJson = fs.createWriteStream('listingInfo.json');
-writeListingJson.write('[\n', 'utf8');
-
-function writeTenMillion(writer, encoding, cb) {
-  let i = 10000000;
-  let id = 0;
+function writeListings(writer, encoding, cb, start, stop) {
+  let i = stop;
+  let id = start;
 
   function write() {
     let ok = true;
@@ -56,39 +53,36 @@ function writeTenMillion(writer, encoding, cb) {
       }
       availableDates = allDates.slice();
 
-      const listingId = id.toString().padStart(8, '0');
+      const _key = id.toString().padStart(8, '0'); 
       const reviews = randomNum(50, 300);
       const price = randomNum(50, 400);
 
       const listing = {
-        listingId,
+        _key,
         reviews,
         price,
         bookings,
       };
 
       let data;
-      if (id === 10000000) {
+      if (id === stop) {
         data = `  ${JSON.stringify(listing)}\n`;
       } else {
         data = `  ${JSON.stringify(listing)},\n`;
       }
 
-      if (i === 0) {
+      if (i === start) {
         writer.write(data, encoding, cb);
       } else {
         ok = writer.write(data, encoding);
       }
-    } while (i > 0 && ok);
+    } while (i > start && ok);
 
-    if (i > 0) {
+    if (i > start) {
       writer.once('drain', write);
     }
   }
   write();
 }
 
-writeTenMillion(writeListingJson, 'utf-8', () => {
-  writeListingJson.write(']');
-  writeListingJson.end();
-});
+module.exports = writeListings;

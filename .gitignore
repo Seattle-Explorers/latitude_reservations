@@ -1,8 +1,8 @@
 node_modules
 coverage
 .DS_Store
+dataFiles
 
 app.spec.js
 listingTable.csv
 reservationsTable.csv
-listingInfo.json
