@@ -68,7 +68,7 @@ class Booking extends React.Component {
           price: data.price,
           pricePerNight: data.price,
           review: data.review,
-          availDates: data.open_dates,
+          availDates: data.availDates,
         });
       })
       .catch((err) => {
@@ -78,10 +78,11 @@ class Booking extends React.Component {
 
   sendReservationInfo() {
     const { listingID } = this.props;
-
-    axios.post(`/api/${listingID}`)
+    const { guests, checkInDate, checkOutDate } = this.state;
+    axios.post(`/api/reservation/${listingID}`, { guests, checkInDate, checkOutDate })
       .then((response) => {
         console.log(response);
+        this.componentDidMount();
       })
       .catch((error) => {
         console.log(error);

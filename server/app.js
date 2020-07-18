@@ -1,10 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+const moment = require('moment');
+const format = require('pg-format');
+const { client } = require('../database');
 
 const DIST_DIR = path.join(__dirname, '..', 'client', 'dist');
-
-const Listings = require('../database/Listing.js');
 
 const app = express();
 
@@ -12,28 +13,101 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static(DIST_DIR));
+app.get('/:id', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../client/dist', 'index.html'));
+});
 
 app.get('/api/reservation/:id', (req, res) => {
-  Listings.findOne({ listing_id: req.params.id })
-    // .exec()
-    .then((listing) => {
-      if (listing === null) {
-        throw new Error('Error');
+  let today = new Date();
+  let threeMonthsFromNow = new Date();
+  const thisMonth = today.getMonth();
+  threeMonthsFromNow.setMonth(thisMonth + 3);
+
+  const availDates = [];
+  today = moment(today);
+  threeMonthsFromNow = moment(threeMonthsFromNow);
+  while (today <= threeMonthsFromNow) {
+    availDates.push(moment(today).format('YYYY-MM-DD'));
+    today = moment(today).add(1, 'days');
+  }
+
+  const text = `SELECT
+  r.date, 
+  l.reviews, 
+  l.price 
+  FROM listings AS l 
+  LEFT JOIN reservations AS r ON 
+  r.listingId = l.listingId 
+  WHERE l.listingId = $1`;
+
+  const values = [req.params.id];
+  client
+    .query({ text, values })
+    .then((result) => {
+      const { reviews, price } = result.rows[0];
+      for (let idx = 0; idx < result.rows.length; idx += 1) {
+        if (availDates.indexOf(result.rows[idx].date)) {
+          availDates.splice(availDates.indexOf(result.rows[idx].date), 1);
+        }
       }
-      res.send(listing);
+
+      res.status(200).send({ review: reviews, price, availDates });
     })
-    .catch((error) => {
-      res.status(500).send(error);
+    .catch((err) => {
+      res.status(500).send(err);
+      throw new Error(`${err}`);
     });
 });
 
-app.put('api/reserve/:id/', (req, res) => {
-  const targetId = req.params.id;
-  Listings.updateOne({ listing_id: targetId })
-    .exec()
-    .then(res.status(201).send())
-    .catch((error) => {
-      res.status(500).send(error);
+app.post('/api/reservation/:id', (req, res) => {
+  const { checkInDate, checkOutDate, guests } = req.body;
+  const { adults, children, infants } = guests;
+
+  const getDates = (start, end) => {
+    const dates = [];
+    const current = new Date(start);
+
+    while (current <= new Date(end)) {
+      dates.push(new Date(current));
+      current.setDate(current.getDate() + 1);
+    }
+    return dates;
+  };
+
+  const values = [];
+
+  const dateRanges = getDates(checkInDate, checkOutDate);
+
+  for (let idx = 0; idx < dateRanges.length; idx += 1) {
+    const input = [req.params.id, adults, children, infants];
+
+    /* moment.js shifted my dates back 1 day.
+    I suspect it's became the time format for my dates are 00:00:00.
+    I needed to forward 1 day to correct.
+    */
+
+    const insertDate = moment(dateRanges[idx]).add(1, 'days').format('YYYY-MM-DD');
+
+    input.splice(1, 0, insertDate);
+    values.push(input);
+  }
+
+  const text = format(`INSERT INTO 
+    reservations(
+    listingid, 
+    date, 
+    adult,
+    children,
+    infant) VALUES %L`, values);
+
+  client
+    .query(text)
+    .then(() => {
+      res.send('this worked!');
+    })
+    .catch((err) => {
+      res.status(500).send(err);
+      throw new Error(`${err}`);
     });
 });
 
