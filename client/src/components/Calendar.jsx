@@ -34,7 +34,7 @@ class Calendar extends React.Component {
       .then(({ data }) => {
         console.log('GET Request Successful: ', data);
         this.setState({
-          availDates: data.open_dates,
+          availDates: data.availDates,
         });
       })
       .catch((err) => {

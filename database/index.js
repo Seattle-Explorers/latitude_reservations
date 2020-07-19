@@ -1,9 +1,8 @@
-const mongoose = require('mongoose');
+const { Client } = require('pg');
 
-const DB = process.env.DB || 'localhost';
-const mongoUri = `mongodb://${DB}/listing`;
-const db = mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
-const { connection } = mongoose;
+const host = process.env.DB || 'localhost';
+const client = new Client({ host, database: 'sdc' });
 
-module.exports = db;
-module.exports.connection = connection;
+client.connect();
+
+module.exports.client = client;
