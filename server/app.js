@@ -18,19 +18,6 @@ app.get('/:id', (req, res) => {
 });
 
 app.get('/api/reservation/:id', (req, res) => {
-  let today = new Date();
-  let threeMonthsFromNow = new Date();
-  const thisMonth = today.getMonth();
-  threeMonthsFromNow.setMonth(thisMonth + 3);
-
-  const availDates = [];
-  today = moment(today);
-  threeMonthsFromNow = moment(threeMonthsFromNow);
-  while (today <= threeMonthsFromNow) {
-    availDates.push(moment(today).format('YYYY-MM-DD'));
-    today = moment(today).add(1, 'days');
-  }
-
   const text = `SELECT
   r.date, 
   l.reviews, 
@@ -45,10 +32,9 @@ app.get('/api/reservation/:id', (req, res) => {
     .query({ text, values })
     .then((result) => {
       const { reviews, price } = result.rows[0];
+      const availDates = [];
       for (let idx = 0; idx < result.rows.length; idx += 1) {
-        if (availDates.indexOf(result.rows[idx].date)) {
-          availDates.splice(availDates.indexOf(result.rows[idx].date), 1);
-        }
+        availDates.push(result.rows[idx].date);
       }
 
       res.status(200).send({ review: reviews, price, availDates });
