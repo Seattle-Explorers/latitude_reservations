@@ -5,7 +5,7 @@ CREATE TABLE listings (
   price int,
   PRIMARY KEY (listingId) 
 );
-
+/home/ec2-user
 \copy listings(listedId, reviews, price) from 'listingTable.csv' delimiter ',' CSV HEADER;
 
 CREATE TABLE reservations(

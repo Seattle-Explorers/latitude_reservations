@@ -1,4 +1,6 @@
+require('newrelic');
 const express = require('express');
+// const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const path = require('path');
 const moment = require('moment');
@@ -9,6 +11,7 @@ const DIST_DIR = path.join(__dirname, '..', 'client', 'dist');
 
 const app = express();
 
+// app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
