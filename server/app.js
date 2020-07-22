@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const moment = require('moment');
 const format = require('pg-format');
-const { client } = require('../database');
+const { pool } = require('../database');
 
 const DIST_DIR = path.join(__dirname, '..', 'client', 'dist');
 
@@ -31,7 +31,7 @@ app.get('/api/reservation/:id', (req, res) => {
   WHERE l.listingId = $1`;
 
   const values = [req.params.id];
-  client
+  pool
     .query({ text, values })
     .then((result) => {
       const { reviews, price } = result.rows[0];
@@ -89,7 +89,7 @@ app.post('/api/reservation/:id', (req, res) => {
     children,
     infant) VALUES %L`, values);
 
-  client
+  pool
     .query(text)
     .then(() => {
       res.send('this worked!');
