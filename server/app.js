@@ -16,8 +16,18 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static(DIST_DIR));
+
 app.get('/:id', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../client/dist', 'index.html'));
+});
+
+// FOR PROXY SERVER
+app.get('reservation/reservationBundle.js', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../client/dist', 'reservationBundle.js'));
+});
+
+app.get('reservation/style.css', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../client/dist', 'style.css'));
 });
 
 app.get('/api/reservation/:id', (req, res) => {
