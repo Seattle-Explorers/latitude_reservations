@@ -4,5 +4,7 @@ coverage
 dataFiles
 
 app.spec.js
-listingTable.csv
-reservationsTable.csv
+newrelic_agent.log
+yarn.lock
+.env
+script.js

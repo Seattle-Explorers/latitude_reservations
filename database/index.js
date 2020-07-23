@@ -1,8 +1,18 @@
-const { Client } = require('pg');
+require('dotenv').config();
 
-const host = process.env.DB || 'localhost';
-const client = new Client({ host, database: 'sdc' });
+const { Pool } = require('pg');
 
-client.connect();
+const pool = new Pool(
+  {
+    user: process.env.DB_USER,
+    host: process.env.HOST || 'localhost',
+    database: process.env.DB || 'sdc',
+    password: process.env.DB_PASS,
+    port: process.env.DB_PORT,
+    max: 20,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 2000,
+  },
+);
 
-module.exports.client = client;
+module.exports.pool = pool;

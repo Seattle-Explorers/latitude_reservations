@@ -1,20 +1,33 @@
+require('newrelic');
 const express = require('express');
+// const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const path = require('path');
 const moment = require('moment');
 const format = require('pg-format');
-const { client } = require('../database');
+const { pool } = require('../database');
 
 const DIST_DIR = path.join(__dirname, '..', 'client', 'dist');
 
 const app = express();
 
+// app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static(DIST_DIR));
+
 app.get('/:id', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../client/dist', 'index.html'));
+});
+
+// FOR PROXY SERVER
+app.get('reservation/reservationBundle.js', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../client/dist', 'reservationBundle.js'));
+});
+
+app.get('reservation/style.css', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../client/dist', 'style.css'));
 });
 
 app.get('/api/reservation/:id', (req, res) => {
@@ -28,7 +41,7 @@ app.get('/api/reservation/:id', (req, res) => {
   WHERE l.listingId = $1`;
 
   const values = [req.params.id];
-  client
+  pool
     .query({ text, values })
     .then((result) => {
       const { reviews, price } = result.rows[0];
@@ -86,7 +99,7 @@ app.post('/api/reservation/:id', (req, res) => {
     children,
     infant) VALUES %L`, values);
 
-  client
+  pool
     .query(text)
     .then(() => {
       res.send('this worked!');
