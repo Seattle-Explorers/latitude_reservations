@@ -1,6 +1,6 @@
 const moment = require('moment');
 // eslint-disable-next-line no-unused-vars
-const db = require('./index.js');
+const db = require('../index.js');
 const Listing = require('./Listing.js');
 
 // :::::Helper Functions:::::

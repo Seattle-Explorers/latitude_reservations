@@ -1,9 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`Booking Component should render correctly in "debug" mode 1`] = `ShallowWrapper {}`;
-
-exports[`Booking Component should render correctly when given a valid listing ID 1`] = `ShallowWrapper {}`;
-
-exports[`Booking Component should render correctly with no props 1`] = `ShallowWrapper {}`;
-
-exports[`MyComponent should render correctly in "debug" mode 1`] = `ShallowWrapper {}`;
