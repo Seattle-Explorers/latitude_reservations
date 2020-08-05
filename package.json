@@ -1,7 +1,7 @@
 {
-  "name": "fec-reservation-component",
+  "name": "latitude-reservations",
   "version": "1.0.0",
-  "description": "This is the reservation component for the FEC project",
+  "description": "This is the reservation component for the latitude project",
   "main": "index.js",
   "scripts": {
     "server": "nodemon ./server/server.js",
@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Team-Danger/FEC-Reservation-Component.git"
+    "url": "git+https://github.com/Seattle-Explorers/latitude_reservations"
   },
-  "author": "Will Park",
+  "author": "Janet Zheng",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Team-Danger/FEC-Reservation-Component/issues"
+    "url": "https://github.com/Seattle-Explorers/latitude_reservations/issues"
   },
-  "homepage": "https://github.com/Team-Danger/FEC-Reservation-Component#readme",
+  "homepage": "https://github.com/Seattle-Explorers/latitude_reservations#readme",
   "dependencies": {
     "@shelf/jest-mongodb": "^1.1.5",
     "axios": "^0.19.2",
@@ -29,6 +29,7 @@
     "express": "^4.17.1",
     "jest-enzyme": "^7.1.2",
     "jquery": "^3.5.1",
+    "k6": "0.0.0",
     "lodash": "^4.17.15",
     "moment": "^2.27.0",
     "morgan": "^1.10.0",
@@ -56,8 +57,6 @@
     "eslint-plugin-jsx-a11y": "^6.3.0",
     "eslint-plugin-react": "^7.20.0",
     "eslint-plugin-react-hooks": "4.0.0",
-    "k6": "0.0.0",
-    "supertest": "^4.0.2",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.12"
   }
