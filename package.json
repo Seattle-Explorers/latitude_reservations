@@ -4,9 +4,6 @@
   "description": "This is the reservation component for the FEC project",
   "main": "index.js",
   "scripts": {
-    "seed": "node ./database/seed.js",
-    "test": "jest",
-    "test-open": "jest --forceExit --detectOpenHandles",
     "server": "nodemon ./server/server.js",
     "start": "npm run seed & node ./server/server.js",
     "build": "webpack",

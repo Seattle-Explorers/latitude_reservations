@@ -1,5 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`Guests Component should render correctly when given a valid listing ID 1`] = `ShallowWrapper {}`;
-
-exports[`Price Component should render correctly when given a valid listing ID 1`] = `ShallowWrapper {}`;
